@@ -1,0 +1,5 @@
+Options -Indexes
+RewriteEngine on
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+DirectoryIndex index.html

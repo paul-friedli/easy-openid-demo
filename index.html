@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Pour que ma page soit une pichenette moins dégueulasse à voir -->
+    <link rel="stylesheet" href="css/oid.css">
+
+    <!-- Nécessaires pour que WrkEasyOpenId.js fonctionne -->
+    <script src="https://alcdn.msauth.net/browser/2.28.3/js/msal-browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/microsoft-graph-client/lib/graph-js-sdk.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@microsoft/microsoft-graph-client/lib/graph-client-msalBrowserAuthProvider.js"></script>
+
+    <!-- Cette démo minimaliste utilise jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+        integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+
+    <!-- Les scripts propres à cette démo minimaliste de OpenID/OAuth2.0 -->
+    <script src="js/openid/WrkEasyOpenId.js"></script>
+    <script src="js/ctrl/Ctrl.js"></script>
+    <script src="js/ihm/IhmUtils.js"></script>
+</head>
+
+<body>
+    <center>
+        <!-- Le blabla fixe de la page -->
+        <header>Hello Microsoft 365 world !</header>
+        <p class="blabla">Cette page minimaliste montre comment une SPA (Single Page Application) peut très facilement
+            utiliser l'OpenID de l'État de Fribourg pour s'identifier et être authentifié.<br><br>L'authentification
+            devrait toujours se faire le plus en amont possible et ce worker <code>WrkEasyOpenId</code> super simple
+            d'emploi et réutilisable s'occupe de tout. Il utilise la librairie LTS pour Azure <a
+                href="https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-overview">MSAL</a> de
+            Microsoft pour réaliser une authentification OpenId Oauth2.0 avec redirection.<br><br>Fournissez tout
+            simplement les écouteurs souhaités à <code>WrkEasyOpenId</code> et vous serez automatiquement notifié avec
+            toute l'information reçue dans un JSON structuré (avec ou sans la photo de profil selon que vous l'aurez
+            souhaitée ou pas).<br><br>Dans cet exemple minimaliste, les informations reçues sont directement affichées
+            dans le tableau ci-dessous ainsi que sous forme brute en JSON.
+        </p>
+
+        <!-- Les 2 boutons pour s'authentifier avec OpenID/OAuth2.0 -->
+        <button id="idBtnLogin" class="login-logout-btn" onclick="javascript:Ctrl.onBtnLoginPressed();"
+            disabled>Login</button>
+        <button id="idBtnLogout" class="login-logout-btn" onclick="javascript:Ctrl.onBtnLogoutPressed();"
+            disabled>Logout</button>
+
+        <!-- L'endroit où toutes les informations seront injectées lorsque reçues -->
+        <div id="all-profile-infos-will-be-then-displayed-here"></div>
+
+        <!-- Signature -->
+        <div class="signature">Ce projet de démonstration est <a
+                href="https://github.com/paul-friedli/easy-openid-demo">grâcieusement mis à disposition sur GitHub</a>.
+            <div class="signature-petit">Written by © Paul Friedli 2023</div>
+        </div>
+    </center>
+</body>
+
+</html>
