@@ -152,13 +152,13 @@ var WrkEasyOpenId = function () {
                             if (retrieveProfilePicture === true) {
 
                                 // Vérifier si la photo n'est pas déjà en cache pour ce token-là, histoire de gagner beaucoup de temps en évitant la requête inutile (car la photo ne change pas souvent...)
-                                let cachedPictureInSession = JSON.parse(sessionStorage.getItem('profile-picture'));
+                                let cachedPictureInSession = JSON.parse(sessionStorage.getItem('profile-picture-cache'));
                                 if ((cachedPictureInSession != null) && (allOpenIDProfileInfos.token.token_id === cachedPictureInSession.currentTokenId)) {
                                     // Oui, alors la prendre du cache local et éviter la requête vers Azure qui prends du temps...
                                     allOpenIDProfileInfos.user.photo = cachedPictureInSession.pictureData;
                                     // Comptabiliser le nbre de fois qu'on a utilisé l'image du cache
                                     cachedPictureInSession.howManyTimesUsed++;
-                                    sessionStorage.setItem('profile-picture', JSON.stringify(cachedPictureInSession));
+                                    sessionStorage.setItem('profile-picture-cache', JSON.stringify(cachedPictureInSession));
                                     console.info('Appel Azure évité, photo du profil prise du cache local ' + cachedPictureInSession.howManyTimesUsed + ' fois...');
                                     // Appeler notre client avec l'ensemble des données du profil reçues
                                     fnOnOIDAuthenticationEvent_Successfull(allOpenIDProfileInfos);
@@ -179,7 +179,7 @@ var WrkEasyOpenId = function () {
                                                         pictureData: allOpenIDProfileInfos.user.photo,
                                                         howManyTimesUsed: 0
                                                     };
-                                                    sessionStorage.setItem('profile-picture', JSON.stringify(cachedPictureInSession));
+                                                    sessionStorage.setItem('profile-picture-cache', JSON.stringify(cachedPictureInSession));
                                                     // Appeler notre client avec l'ensemble des données du profil reçues
                                                     fnOnOIDAuthenticationEvent_Successfull(allOpenIDProfileInfos);
                                                 }, false);
@@ -192,7 +192,16 @@ var WrkEasyOpenId = function () {
                                             }
                                         })
                                         .catch(error => {
-                                            console.error("Erreur lors de la récupération de la photo de profil de l'utilisateur : " + error);
+                                            if (error.toString().includes('404')) {
+                                                // L'utilisateur ne semble pas avoir de photo dans son profil Azure
+                                                allOpenIDProfileInfos.user.photo = null;
+                                                // Appeler notre client avec l'ensemble des données du profil reçues
+                                                fnOnOIDAuthenticationEvent_Successfull(allOpenIDProfileInfos);
+                                                // Erreur "normale" car l'utilisateur n'a pas de photo dans son profil !
+                                                console.warn("Photo demandée pour un utilisateur qui n'en possède pas !");
+                                            } else {
+                                                console.error("Erreur lors de la récupération de la photo de profil de l'utilisateur : " + error);
+                                            }
                                         });
                                 }
                             } else {

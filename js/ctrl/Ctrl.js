@@ -4,8 +4,18 @@ jQuery(document).ready(function () {
     // =====================================
     // Lors du onLoad() de la page
     // =====================================
+
+    // L'utilisateur souhaite-t-il ou pas la photo ? Etat initial et écouter les changements utilisateur
+    $('#profile-picture-is-desired').prop('checked', Ctrl.inclurePhotoDeProfil());
+    $("#profile-picture-is-desired").change(function() {
+        Ctrl.inclurePhotoDeProfil($(this).prop('checked'));
+        location.reload();  // Refresh de la page
+    });
+
+    // Tentative d'identification/authentification OpenID / OAuth2.0 automatique
+    // si l'utilisateur a déjà fait tout le processus dans cette session
     WrkEasyOpenId.openIdAuthenticationRefresh(
-        true,   // true si on veut aussi la photo de profil
+        Ctrl.inclurePhotoDeProfil(),   // true/false si on veut (ou pas) la photo de profil en plus des autres infos
         Ctrl.onOIDAuthentication_Started,
         Ctrl.onOIDAuthentication_Failed,
         Ctrl.onOIDAuthentication_Unsuccessfull,
@@ -14,6 +24,17 @@ jQuery(document).ready(function () {
 });
 
 var Ctrl = function () {
+
+    var _inclurePhotoDeProfil = function (souhaitee) {
+        let actuellementDesiree = JSON.parse(sessionStorage.getItem('profile-picture-desired'));
+        if (actuellementDesiree == null)
+            actuellementDesiree = false;    // Par défaut
+        if (typeof souhaitee === 'boolean' && (actuellementDesiree !== souhaitee)) {
+            actuellementDesiree = souhaitee;
+            sessionStorage.setItem('profile-picture-desired', JSON.stringify(actuellementDesiree));
+        }
+        return actuellementDesiree;
+    };
 
     var _onBtnLoginPressed = function (event) {
 
@@ -37,7 +58,7 @@ var Ctrl = function () {
         $('#idBtnLogout').prop('disabled', true);
 
         // Vider le <div> prévu pour afficher toutes les informations OpenID reçues
-        $('#all-profile-infos-will-be-then-displayed-here').html('Rien à afficher pour le moment...');    
+        $('#all-profile-infos-will-be-then-displayed-here').html('Rien à afficher pour le moment...');
     };
 
     var _onIDAuthentication_Successfull = function (OpenIDProfileInfos) {
@@ -50,7 +71,7 @@ var Ctrl = function () {
 
         // Afficher toutes les informations reçues dans `OpenIDProfileInfos` dans le <div> prévu
         let html_to_inject = IhmUtils.OIDProfileToHTML(OpenIDProfileInfos);
-        $('#all-profile-infos-will-be-then-displayed-here').html(html_to_inject);    
+        $('#all-profile-infos-will-be-then-displayed-here').html(html_to_inject);
     };
 
     var _onOIDAuthentication_Started = function () {
@@ -78,6 +99,7 @@ var Ctrl = function () {
     };
 
     return {
+        inclurePhotoDeProfil: _inclurePhotoDeProfil,
         onBtnLoginPressed: _onBtnLoginPressed,
         onBtnLogoutPressed: _onBtnLogoutPressed,
         onOIDAuthentication_Started: _onOIDAuthentication_Started,

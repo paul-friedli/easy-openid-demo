@@ -38,11 +38,16 @@
             dans le tableau ci-dessous ainsi que sous forme brute en JSON.
         </p>
 
-        <!-- Les 2 boutons pour s'authentifier avec OpenID/OAuth2.0 -->
+        <!-- Les 2 boutons pour s'authentifier auprès du OpenID de l'État de Fribourg -->
         <button id="idBtnLogin" class="login-logout-btn" onclick="javascript:Ctrl.onBtnLoginPressed();"
             disabled>Login</button>
         <button id="idBtnLogout" class="login-logout-btn" onclick="javascript:Ctrl.onBtnLogoutPressed();"
             disabled>Logout</button>
+        <!-- Pour spécifier si l'on désire récupérer (ou pas) la photo de profil de l'utilisateur -->
+        <div>
+            <input type="checkbox" id="profile-picture-is-desired" name="IncludePicture" />
+            <label for="IncludePicture">Inclure la photo de profil ?</label>
+        </div>
 
         <!-- L'endroit où toutes les informations seront injectées lorsque reçues -->
         <div id="all-profile-infos-will-be-then-displayed-here"></div>
@@ -50,7 +55,8 @@
         <!-- Signature -->
         <div class="signature">Ce projet de démonstration est <a
                 href="https://github.com/paul-friedli/easy-openid-demo">grâcieusement mis à disposition sur GitHub</a>.
-            <div class="signature-petit">Written by © Paul Friedli 2023</div>
+            <div class="signature-petit">Written by © Paul Friedli 2023<br><img src="res/polosoft-logo-192x36.png"
+                    height="18"></div>
         </div>
     </center>
 </body>
