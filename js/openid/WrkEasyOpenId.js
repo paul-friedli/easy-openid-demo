@@ -192,16 +192,15 @@ var WrkEasyOpenId = function () {
                                             }
                                         })
                                         .catch(error => {
-                                            if (error.toString().includes('404')) {
-                                                // L'utilisateur ne semble pas avoir de photo dans son profil Azure
-                                                allOpenIDProfileInfos.user.photo = null;
-                                                // Appeler notre client avec l'ensemble des données du profil reçues
-                                                fnOnOIDAuthenticationEvent_Successfull(allOpenIDProfileInfos);
-                                                // Erreur "normale" car l'utilisateur n'a pas de photo dans son profil !
-                                                console.warn("Photo demandée pour un utilisateur qui n'en possède pas !");
-                                            } else {
-                                                console.error("Erreur lors de la récupération de la photo de profil de l'utilisateur : " + error);
-                                            }
+                                            // L'utilisateur ne semble pas avoir de photo dans son profil Azure
+                                            // soit le serveur a répondu avec un 404 (l'utilisateur n'a pas de photo)
+                                            // soit il y a une autre erreur mais dans tous les cas on n'a pas de photo
+                                            // à se mettre sous la dent...
+                                            allOpenIDProfileInfos.user.photo = null;
+                                            // Appeler notre client avec l'ensemble des données du profil reçues
+                                            fnOnOIDAuthenticationEvent_Successfull(allOpenIDProfileInfos);
+                                            // Erreur "normale" car l'utilisateur n'a pas de photo dans son profil !
+                                            console.warn("Photo demandée pour un utilisateur qui n'en possède pas ou qui ne peut pas être obtenue !");
                                         });
                                 }
                             } else {
