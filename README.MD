@@ -78,7 +78,7 @@ Ce projet contient les fichiers suivants :
 | [WrkEasyOpenId.js](js/openid/WrkEasyOpenId.js) | qui contient mon worker qui devrait s'occuper de tout au niveau OpenID/OAuth2.0, login, logout et redirection. |
 | [Ctrl.js](js/ctrl/Ctrl.js) | le contrôleur de l'application qui appelle `openIdAuthenticationRefresh()` au chargement de la page et qui ne contient que 6 écouteurs : 2 pour écouter les boutons de l'ihm pour appeler les méthodes login() et logout de `WrkEasyOpenId` lorsque pressés, et 4 pour être notifiés par `WrkEasyOpenId` des événements tels que authentification réussie, échouée, en cours, ... |
 ## Copyright ©
-<img align="left" width="128" style="padding-right: 1em;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/WTFPL_logo.svg/langfr-300px-WTFPL_logo.svg.png" alt="WTFPL image" />  
+<img align="left" width="128" style="padding-right: 1em;" src="res/WTFPL_logo.svg.png" alt="WTFPL image" />  
 
 Comme indiqué dans `WrkEasyOpenId.js`, ce logiciel est publié sous le modèle de licence [WTFPL](https://fr.wikipedia.org/wiki/WTFPL).
 **WTFPL** = _Do What The Fuck You Want Public License_.  
